@@ -1,23 +1,38 @@
+globals [veneno]
+
+turtles-own [energia preferida]
 
 to Setup
   clear-all
-  Setup-Patches
+  reset-ticks
+  ask patches
+  [
+    if random 101 < alimento_verde ;gera o alimento verde com base no slider da interface
+    [
+      set pcolor green
+      set plabel-color black
+    ]
+
+    if random 101 < alimento_amarelo ;gera o alimento amarelo com base no slider da interface
+    [
+      set pcolor yellow
+      set plabel-color black
+    ]
+
+    if random 101 < armadilhas ;gera as armadilhas com base no slider da interface
+    [
+      set pcolor red
+      set plabel-color black
+    ]
+
+  ]
 end
 
 to Go
 
 end
 
-to Setup-Patches
-  ask patches
-  [
-    let x random 101 ; numero aleatorio entre 0 e 100
-    if x < 10
-    [
-      set pcolor green
-    ]
-  ]
-end
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 569
@@ -83,27 +98,42 @@ NIL
 SLIDER
 130
 165
-302
+267
 198
-alimento1
-alimento1
+alimento_verde
+alimento_verde
 0
 15
-9.0
+8.0
 1
 1
 %
 HORIZONTAL
 
 SLIDER
-226
-123
-398
-156
-alimento2
-alimento2
+130
+132
+268
+165
+alimento_amarelo
+alimento_amarelo
 0
 5
+3.0
+1
+1
+%
+HORIZONTAL
+
+SLIDER
+130
+198
+268
+231
+armadilhas
+armadilhas
+0
+2
 1.0
 1
 1
