@@ -3,44 +3,52 @@ globals [veneno]
 turtles-own [energia preferida]
 
 to Setup
-  clear-all
   reset-ticks
+  Setup-Patches
+end
+
+to Go
+
+end
+
+to Setup-Patches
+  clear-all
+  set-patch-size 15
+  reset-ticks
+
   ask patches
   [
     if random 101 < alimento_verde ;gera o alimento verde com base no slider da interface
     [
       set pcolor green
-      set plabel-color black
     ]
 
     if random 101 < alimento_amarelo ;gera o alimento amarelo com base no slider da interface
     [
       set pcolor yellow
-      set plabel-color black
     ]
 
     if random 101 < armadilhas ;gera as armadilhas com base no slider da interface
     [
       set pcolor red
-      set plabel-color black
     ]
-
-
   ]
-end
 
-to Go
+  ask n-of abrigos patches
+  [
+    set pcolor blue
+  ]
 
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 569
 24
-1006
-462
+1072
+528
 -1
 -1
-13.0
+15.0
 1
 10
 1
@@ -61,10 +69,10 @@ ticks
 30.0
 
 BUTTON
-28
-39
-92
-72
+200
+46
+264
+79
 NIL
 Setup
 NIL
@@ -78,10 +86,10 @@ NIL
 1
 
 BUTTON
-97
-39
-160
-72
+269
+46
+332
+79
 NIL
 Go
 T
@@ -95,9 +103,9 @@ NIL
 1
 
 SLIDER
-130
+16
 165
-267
+154
 198
 alimento_verde
 alimento_verde
@@ -110,9 +118,9 @@ alimento_verde
 HORIZONTAL
 
 SLIDER
-130
+16
 132
-268
+154
 165
 alimento_amarelo
 alimento_amarelo
@@ -125,9 +133,9 @@ alimento_amarelo
 HORIZONTAL
 
 SLIDER
-130
+16
 198
-268
+154
 231
 armadilhas
 armadilhas
@@ -140,19 +148,29 @@ armadilhas
 HORIZONTAL
 
 SLIDER
-130
+16
 231
-268
+154
 264
 abrigos
 abrigos
 1
 10
-1.0
+5.0
 1
 1
 NIL
 HORIZONTAL
+
+TEXTBOX
+19
+104
+169
+126
+Sliders Ambiente:
+18
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
