@@ -45,18 +45,16 @@ to Setup-Turtles
   clear-turtles
 
   create-basics nbasics[
-    set shape "bug"
-    set color blue
+    set color white
     setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = red]
+    while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
   create-experts nexperts[
-    set shape "target"
-    set color yellow
+    set color
     setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = red]
+    while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
@@ -194,9 +192,9 @@ Sliders Ambiente:
 1
 
 TEXTBOX
-174
+181
 104
-324
+331
 126
 Sliders Agentes:
 18
@@ -204,30 +202,30 @@ Sliders Agentes:
 1
 
 SLIDER
-170
+177
 132
-342
+349
 165
 nbasics
 nbasics
 0
 100
-50.0
+10.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-170
-170
-342
-203
+177
+165
+349
+198
 nexperts
 nexperts
 0
 100
-50.0
+10.0
 1
 1
 NIL

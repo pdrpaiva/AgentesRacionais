@@ -45,18 +45,16 @@ to Setup-Turtles
   clear-turtles
 
   create-basics nbasics[
-    set shape "bug"
-    set color blue
+    set color white
     setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = red]
+    while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
   create-experts nexperts[
-    set shape "target"
-    set color yellow
+    set color orange
     setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = red]
+    while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
@@ -212,7 +210,7 @@ nbasics
 nbasics
 0
 100
-50.0
+10.0
 1
 1
 NIL
@@ -227,7 +225,7 @@ nexperts
 nexperts
 0
 100
-50.0
+10.0
 1
 1
 NIL
