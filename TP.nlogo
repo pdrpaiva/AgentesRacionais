@@ -1,6 +1,8 @@
 breed [basics basic] ;cria agentes do tipo basic
 breed [experts expert] ;cria agentes do tipo expert
 
+turtles-own [ energy ]
+
 to Setup
   reset-ticks
   Setup-Patches
@@ -8,13 +10,29 @@ to Setup
 end
 
 to Go
+  if not any? turtles [ stop ] ; para se não houverem agentes
 
+  ask basics[
+    Move
+    set energy energy - 1
+    Basic-Food
+    Death
+  ]
+
+  ask experts[
+    Move
+    set energy energy - 1
+    Expert-Food
+    Death
+  ]
 end
 
 to Setup-Patches
   clear-all
   set-patch-size 15
   reset-ticks
+
+  ask patches [ set pcolor black] ;background
 
   ask patches
   [
@@ -46,18 +64,46 @@ to Setup-Turtles
 
   create-basics nbasics[
     set color white
+    set energy 100
+    set size 1.5
     setxy random-xcor random-ycor
     while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
   create-experts nexperts[
-    set color orange
+    set color magenta
+    set energy 100
+    set size 1.5
     setxy random-xcor random-ycor
     while [ [pcolor] of patch-here = black]
       [setxy random-xcor random-ycor]
   ]
 
+end
+
+to Move ;funcao para as turtles se moverem
+  rt random 50
+  lt random 50
+  fd 1
+end
+
+to Death
+  if energy < 0 [ die ] ; os agentes morrem quando a energia chega a 0
+end
+
+to Basic-Food
+  if pcolor = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
+    set pcolor black
+    set energy energy + 10
+  ]
+end
+
+to Expert-Food
+  if pcolor = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
+    set pcolor black
+    set energy energy + 10
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -130,7 +176,7 @@ alimento_verde
 alimento_verde
 0
 15
-8.0
+12.0
 1
 1
 %
@@ -145,7 +191,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-3.0
+5.0
 1
 1
 %
@@ -210,7 +256,7 @@ nbasics
 nbasics
 0
 100
-10.0
+20.0
 1
 1
 NIL
@@ -225,7 +271,7 @@ nexperts
 nexperts
 0
 100
-10.0
+22.0
 1
 1
 NIL
