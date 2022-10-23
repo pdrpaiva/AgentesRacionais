@@ -1,6 +1,3 @@
-globals [veneno]
-
-turtles-own [energia preferida]
 
 to Setup
   reset-ticks
@@ -69,10 +66,10 @@ ticks
 30.0
 
 BUTTON
-28
-39
-92
-72
+200
+46
+264
+79
 NIL
 Setup
 NIL
@@ -86,10 +83,10 @@ NIL
 1
 
 BUTTON
-97
-39
-160
-72
+269
+46
+332
+79
 NIL
 Go
 T
@@ -103,9 +100,9 @@ NIL
 1
 
 SLIDER
-130
+16
 165
-267
+154
 198
 alimento_verde
 alimento_verde
@@ -118,9 +115,9 @@ alimento_verde
 HORIZONTAL
 
 SLIDER
-130
+16
 132
-268
+154
 165
 alimento_amarelo
 alimento_amarelo
@@ -133,9 +130,9 @@ alimento_amarelo
 HORIZONTAL
 
 SLIDER
-130
+16
 198
-268
+154
 231
 armadilhas
 armadilhas
@@ -148,26 +145,36 @@ armadilhas
 HORIZONTAL
 
 SLIDER
-130
+16
 231
-268
+154
 264
 abrigos
 abrigos
 1
 10
-5.0
+4.0
 1
 1
 NIL
 HORIZONTAL
 
 TEXTBOX
-7
-103
-157
-125
+19
+104
+169
+126
 Sliders Ambiente:
+18
+0.0
+1
+
+TEXTBOX
+174
+104
+324
+126
+Sliders Agentes:
 18
 0.0
 1
@@ -514,7 +521,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

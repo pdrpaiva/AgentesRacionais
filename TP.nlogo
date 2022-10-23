@@ -1,7 +1,3 @@
-globals [veneno]
-
-turtles-own [energia preferida]
-
 to Setup
   reset-ticks
   Setup-Patches
@@ -156,7 +152,7 @@ abrigos
 abrigos
 1
 10
-5.0
+4.0
 1
 1
 NIL
@@ -168,6 +164,16 @@ TEXTBOX
 169
 126
 Sliders Ambiente:
+18
+0.0
+1
+
+TEXTBOX
+174
+104
+324
+126
+Sliders Agentes:
 18
 0.0
 1
@@ -514,7 +520,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
