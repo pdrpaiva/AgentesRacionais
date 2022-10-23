@@ -1,7 +1,10 @@
+breed [basics basic] ;cria agentes do tipo basic
+breed [experts expert] ;cria agentes do tipo expert
 
 to Setup
   reset-ticks
   Setup-Patches
+  Setup-Turtles
 end
 
 to Go
@@ -34,6 +37,27 @@ to Setup-Patches
   ask n-of abrigos patches
   [
     set pcolor blue
+  ]
+
+end
+
+to Setup-Turtles
+  clear-turtles
+
+  create-basics nbasics[
+    set shape "bug"
+    set color blue
+    setxy random-xcor random-ycor
+    while [ [pcolor] of patch-here = red]
+      [setxy random-xcor random-ycor]
+  ]
+
+  create-experts nexperts[
+    set shape "target"
+    set color yellow
+    setxy random-xcor random-ycor
+    while [ [pcolor] of patch-here = red]
+      [setxy random-xcor random-ycor]
   ]
 
 end
@@ -178,6 +202,36 @@ Sliders Agentes:
 18
 0.0
 1
+
+SLIDER
+170
+132
+342
+165
+nbasics
+nbasics
+0
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+170
+170
+342
+203
+nexperts
+nexperts
+0
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
