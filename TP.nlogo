@@ -2,6 +2,7 @@ breed [basics basic] ;cria agentes do tipo basic
 breed [experts expert] ;cria agentes do tipo expert
 
 turtles-own [ energy ]
+experts-own [ xp ]
 
 to Setup
   reset-ticks
@@ -123,6 +124,41 @@ to MoveBasics
   ]
 end
 
+to MoveExperts
+  ask experts[
+    (ifelse
+      [pcolor] of patch-ahead 1 = green or [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
+      [fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = green or [pcolor] of patch-right-and-ahead 90 1 = yellow;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
+      [rt 90 fd 1]
+
+      [pcolor] of patch-left-and-ahead 90 1 = green or [pcolor] of patch-left-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
+      [lt 90 fd 1]
+
+      [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1]
+
+      [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
+      [fd 1]
+      ; else
+      [
+        (ifelse
+          random 101 <= 50 [fd 1]
+
+          random 101 <= 50 [rt 90 fd 1]
+        )
+      ]
+    )
+  ]
+end
+
 to Death
   if energy < 0 [ die ] ; os agentes morrem quando a energia chega a 0
 end
@@ -135,9 +171,13 @@ to Basic-Food
 end
 
 to Expert-Food
-  if pcolor = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
+  if [pcolor] of patch-here = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
     set pcolor black
     set energy energy + 10
+  ]
+  if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent expert ganha 5 de energia
+    set pcolor black
+    set energy energy + 5
   ]
 end
 
@@ -298,7 +338,7 @@ nbasics
 nbasics
 0
 100
-20.0
+10.0
 1
 1
 NIL
@@ -313,7 +353,7 @@ nexperts
 nexperts
 0
 100
-22.0
+0.0
 1
 1
 NIL
