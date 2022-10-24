@@ -13,7 +13,7 @@ to Go
   if not any? turtles [ stop ] ; para se não houverem agentes
 
   ask basics[
-    Move
+    MoveBasics
     set energy energy - 1
     Basic-Food
     Basic-Armadilha
@@ -64,6 +64,7 @@ to Setup-Turtles
   clear-turtles
 
   create-basics nbasics[
+    set heading 0
     set color white
     set energy 100
     set size 1.5
@@ -73,6 +74,7 @@ to Setup-Turtles
   ]
 
   create-experts nexperts[
+    set heading 0
     set color magenta
     set energy 100
     set size 1.5
@@ -92,10 +94,10 @@ end
 to MoveBasics
   ask basics[
     (ifelse
-      [pcolor] of patch-ahead 1 = yellow ;segue em frente p/ comer
+      [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1]
 
-      [pcolor] of patch-right-and-ahead 90 1 = yellow ;roda 90 p/ direita e segue em frente p/ comer
+      [pcolor] of patch-right-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
       [rt 90 fd 1]
 
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
@@ -109,6 +111,14 @@ to MoveBasics
 
       [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       [fd 1]
+      ; else
+      [
+        (ifelse
+          random 101 <= 50 [fd 1]
+
+          random 101 <= 50 [rt 90 fd 1]
+        )
+      ]
     )
   ]
 end
@@ -118,7 +128,7 @@ to Death
 end
 
 to Basic-Food
-  if pcolor = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
+  if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
     set pcolor black
     set energy energy + 10
   ]
