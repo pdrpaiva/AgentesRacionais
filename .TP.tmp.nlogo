@@ -16,7 +16,7 @@ to Go
     Move
     set energy energy - 1
     Basic-Food
-    Basic-Armadilha
+
     Death
   ]
 
