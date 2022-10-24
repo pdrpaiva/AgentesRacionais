@@ -91,7 +91,25 @@ end
 
 to MoveBasics
   ask basics[
+    (ifelse
+      [pcolor] of patch-ahead 1 = yellow ;segue em frente p/ comer
+      [fd 1]
 
+      [pcolor] of patch-right-and-ahead 90 1 = yellow ;roda 90 p/ direita e segue em frente p/ comer
+      [rt 90 fd 1]
+
+      [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1]
+
+      [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue
+      [fd 1]
+    )
   ]
 end
 
@@ -114,7 +132,7 @@ to Expert-Food
 end
 
 to Basic-Armadilha
- if pcolor = red [ ;se pisar uma armadilha
+ if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red [ ;se percecionar uma armadilha
     if energy < 100 [ die ] ;morre se a sua energia for inferior a 100
     if energy >= 100 [ set energy energy - (energy * 0.1)]  ;perde 10% da sua energia se a sua energia for superior a 100
  ]
@@ -148,10 +166,10 @@ ticks
 30.0
 
 BUTTON
-366
-132
-430
-165
+360
+38
+424
+71
 NIL
 Setup
 NIL
@@ -165,10 +183,10 @@ NIL
 1
 
 BUTTON
-435
-132
-498
-165
+429
+38
+492
+71
 NIL
 Go
 T
@@ -182,10 +200,10 @@ NIL
 1
 
 SLIDER
-16
-165
-154
-198
+10
+71
+148
+104
 alimento_verde
 alimento_verde
 0
@@ -197,10 +215,10 @@ alimento_verde
 HORIZONTAL
 
 SLIDER
-16
-132
-154
-165
+10
+38
+148
+71
 alimento_amarelo
 alimento_amarelo
 0
@@ -212,10 +230,10 @@ alimento_amarelo
 HORIZONTAL
 
 SLIDER
-16
-198
-154
-231
+10
+104
+148
+137
 armadilhas
 armadilhas
 0
@@ -227,10 +245,10 @@ armadilhas
 HORIZONTAL
 
 SLIDER
-16
-231
-154
-264
+10
+137
+148
+170
 abrigos
 abrigos
 1
@@ -242,30 +260,30 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-19
-104
-169
-126
+13
+10
+163
+32
 Sliders Ambiente:
 18
 0.0
 1
 
 TEXTBOX
-181
-104
-331
-126
+175
+10
+325
+32
 Sliders Agentes:
 18
 0.0
 1
 
 SLIDER
-177
-132
-349
-165
+171
+38
+343
+71
 nbasics
 nbasics
 0
@@ -277,10 +295,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-177
-165
-349
-198
+171
+71
+343
+104
 nexperts
 nexperts
 0
@@ -292,20 +310,20 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-178
-207
-328
-241
+172
+113
+322
+147
 Basics - Branco\nExperts - Magenta
 14
 0.0
 1
 
 TEXTBOX
-18
-269
-168
-337
+12
+175
+162
+243
 Basics Food - Amarelo\nExperts Food - Verde\nArmadilhas - Vermelho\nAbrigos - Azul
 14
 0.0

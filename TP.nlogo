@@ -91,7 +91,25 @@ end
 
 to MoveBasics
   ask basics[
+    (ifelse
+      [pcolor] of patch-ahead 1 = yellow ;segue em frente p/ comer
+      [fd 1]
 
+      [pcolor] of patch-right-and-ahead 90 1 = yellow ;roda 90 p/ direita e segue em frente p/ comer
+      [rt 90 fd 1]
+
+      [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1]
+
+      [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
+      [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
+      [fd 1]
+    )
   ]
 end
 
@@ -114,7 +132,7 @@ to Expert-Food
 end
 
 to Basic-Armadilha
- if pcolor = red [ ;se pisar uma armadilha
+ if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red [ ;se percecionar uma armadilha
     if energy < 100 [ die ] ;morre se a sua energia for inferior a 100
     if energy >= 100 [ set energy energy - (energy * 0.1)]  ;perde 10% da sua energia se a sua energia for superior a 100
  ]
