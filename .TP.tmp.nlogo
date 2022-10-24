@@ -16,7 +16,7 @@ to Go
     Move
     set energy energy - 1
     Basic-Food
-
+    Basic-Armadilha
     Death
   ]
 
@@ -83,10 +83,16 @@ to Setup-Turtles
 
 end
 
-to Move ;funcao para as turtles se moverem
+to Move ;NÃO FAZ PARTE
   rt random 50
   lt random 50
   fd 1
+end
+
+to MoveBasics
+  ask basics[
+
+  ]
 end
 
 to Death
@@ -142,10 +148,10 @@ ticks
 30.0
 
 BUTTON
-200
-46
-264
-79
+366
+132
+430
+165
 NIL
 Setup
 NIL
@@ -159,10 +165,10 @@ NIL
 1
 
 BUTTON
-269
-46
-332
-79
+435
+132
+498
+165
 NIL
 Go
 T
@@ -214,7 +220,7 @@ armadilhas
 armadilhas
 0
 2
-0.0
+2.0
 1
 1
 %
@@ -284,6 +290,26 @@ nexperts
 1
 NIL
 HORIZONTAL
+
+TEXTBOX
+178
+207
+328
+241
+Basics - Branco\nExperts - Magenta
+14
+0.0
+1
+
+TEXTBOX
+18
+269
+168
+337
+Basics Food - Amarelo\nExperts Food - Verde\nArmadilhas - Vermelho\nAbrigos - Azul
+14
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?

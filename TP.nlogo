@@ -83,10 +83,16 @@ to Setup-Turtles
 
 end
 
-to Move ;funcao para as turtles se moverem
+to Move ;NÃO FAZ PARTE
   rt random 50
   lt random 50
   fd 1
+end
+
+to MoveBasics
+  ask basics[
+
+  ]
 end
 
 to Death
@@ -142,10 +148,10 @@ ticks
 30.0
 
 BUTTON
-200
-46
-264
-79
+360
+38
+424
+71
 NIL
 Setup
 NIL
@@ -159,10 +165,10 @@ NIL
 1
 
 BUTTON
-269
-46
-332
-79
+429
+38
+492
+71
 NIL
 Go
 T
@@ -176,10 +182,10 @@ NIL
 1
 
 SLIDER
-16
-165
-154
-198
+10
+71
+148
+104
 alimento_verde
 alimento_verde
 0
@@ -191,10 +197,10 @@ alimento_verde
 HORIZONTAL
 
 SLIDER
-16
-132
-154
-165
+10
+38
+148
+71
 alimento_amarelo
 alimento_amarelo
 0
@@ -206,25 +212,25 @@ alimento_amarelo
 HORIZONTAL
 
 SLIDER
-16
-198
-154
-231
+10
+104
+148
+137
 armadilhas
 armadilhas
 0
 2
-0.0
+2.0
 1
 1
 %
 HORIZONTAL
 
 SLIDER
-16
-231
-154
-264
+10
+137
+148
+170
 abrigos
 abrigos
 1
@@ -236,30 +242,30 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-19
-104
-169
-126
+13
+10
+163
+32
 Sliders Ambiente:
 18
 0.0
 1
 
 TEXTBOX
-181
-104
-331
-126
+175
+10
+325
+32
 Sliders Agentes:
 18
 0.0
 1
 
 SLIDER
-177
-132
-349
-165
+171
+38
+343
+71
 nbasics
 nbasics
 0
@@ -271,10 +277,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-177
-165
-349
-198
+171
+71
+343
+104
 nexperts
 nexperts
 0
@@ -284,6 +290,26 @@ nexperts
 1
 NIL
 HORIZONTAL
+
+TEXTBOX
+172
+113
+322
+147
+Basics - Branco\nExperts - Magenta
+14
+0.0
+1
+
+TEXTBOX
+12
+175
+162
+243
+Basics Food - Amarelo\nExperts Food - Verde\nArmadilhas - Vermelho\nAbrigos - Azul
+14
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
