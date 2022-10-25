@@ -2,7 +2,7 @@ breed [basics basic] ;cria agentes do tipo basic
 breed [experts expert] ;cria agentes do tipo expert
 
 turtles-own [ energy ]
-experts-own [ xp ]
+experts-own [ xp alimento descanso]
 
 to Setup
   reset-ticks
@@ -15,16 +15,15 @@ to Go
 
   ask basics[
     MoveBasics
-    set energy energy - 1
     Basic-Food
     Basic-Armadilha
     Death
   ]
 
   ask experts[
-    Move
-    set energy energy - 1
+    MoveExperts
     Expert-Food
+    Expert-Armadilha
     Death
   ]
 end
@@ -86,38 +85,36 @@ to Setup-Turtles
 
 end
 
-to Move ;NÃO FAZ PARTE
-  rt random 50
-  lt random 50
-  fd 1
+to Perde-Energia ;NÃO FAZ PARTE
+  set energy energy - 1
 end
 
 to MoveBasics
   ask basics[
     (ifelse
       [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
-      [fd 1]
+      [fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
-      [fd 1]
+      [fd 1 Perde-Energia]
 
       [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
-      [fd 1]
+      [fd 1 Perde-Energia]
       ; else
       [
         (ifelse
-          random 101 <= 50 [fd 1]
+          random 101 <= 50 [fd 1 Perde-Energia]
 
-          random 101 <= 50 [rt 90 fd 1]
+          random 101 <= 50 [rt 90 fd 1 Perde-Energia]
         )
       ]
     )
@@ -128,31 +125,33 @@ to MoveExperts
   ask experts[
     (ifelse
       [pcolor] of patch-ahead 1 = green or [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
-      [fd 1]
+      [fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = green or [pcolor] of patch-right-and-ahead 90 1 = yellow;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-left-and-ahead 90 1 = green or [pcolor] of patch-left-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
-      [lt 90 fd 1]
+      [lt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
-      [fd 1]
+      [fd 1 Perde-Energia]
 
       [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
-      [rt 90 fd 1]
+      [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
-      [fd 1]
+      [fd 1 Perde-Energia]
       ; else
       [
         (ifelse
-          random 101 <= 50 [fd 1]
+          random 101 <= 50 [fd 1 Perde-Energia]
 
-          random 101 <= 50 [rt 90 fd 1]
+          random 101 <= 50 [rt 90 fd 1 Perde-Energia]
+
+          random 101 <= 50 [lt 90 fd 1 Perde-Energia]
         )
       ]
     )
@@ -174,10 +173,15 @@ to Expert-Food
   if [pcolor] of patch-here = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
     set pcolor black
     set energy energy + 10
+    set alimento alimento + 1 ;o alimento incrementa
+    if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 2] ;se o resto da divisao do alimento por 10 for 0 ganha 2 de xp
+
   ]
   if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent expert ganha 5 de energia
     set pcolor black
     set energy energy + 5
+    set alimento alimento + 1 ;o alimento incrementa
+    if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 1] ;se o resto da divisao do alimento por 10 for 0 ganha 1 de xp
   ]
 end
 
@@ -187,12 +191,23 @@ to Basic-Armadilha
     if energy >= 100 [ set energy energy - (energy * 0.1)]  ;perde 10% da sua energia se a sua energia for superior a 100
  ]
 end
+
+to Expert-Armadilha
+ if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red or  [pcolor] of patch-left-and-ahead 90 1 = red [ ;se percecionar uma armadilha
+    if xp >= 50 [] ;instrução armadilha não causa dano
+    if xp < 50 and energy >= 100 [set energy energy - (energy * 0.1)] ;perde 10%
+    if xp < 50 and energy < 100 [die] ;morre
+ ]
+end
+
+;MODELO MELHORADO
+
 @#$#@#$#@
 GRAPHICS-WINDOW
-569
-24
-1072
-528
+353
+10
+856
+514
 -1
 -1
 15.0
@@ -216,10 +231,10 @@ ticks
 30.0
 
 BUTTON
-360
-38
-424
-71
+166
+10
+247
+55
 NIL
 Setup
 NIL
@@ -233,10 +248,10 @@ NIL
 1
 
 BUTTON
-429
-38
-492
-71
+254
+10
+341
+55
 NIL
 Go
 T
@@ -250,10 +265,10 @@ NIL
 1
 
 SLIDER
-10
-71
-148
-104
+8
+122
+146
+155
 alimento_verde
 alimento_verde
 0
@@ -265,10 +280,10 @@ alimento_verde
 HORIZONTAL
 
 SLIDER
-10
-38
-148
-71
+8
+89
+146
+122
 alimento_amarelo
 alimento_amarelo
 0
@@ -280,10 +295,10 @@ alimento_amarelo
 HORIZONTAL
 
 SLIDER
-10
-104
-148
-137
+8
+155
+146
+188
 armadilhas
 armadilhas
 0
@@ -295,10 +310,10 @@ armadilhas
 HORIZONTAL
 
 SLIDER
-10
-137
-148
-170
+8
+188
+146
+221
 abrigos
 abrigos
 1
@@ -310,30 +325,30 @@ NIL
 HORIZONTAL
 
 TEXTBOX
-13
-10
-163
-32
+9
+61
+159
+83
 Sliders Ambiente:
 18
 0.0
 1
 
 TEXTBOX
-175
-10
-325
-32
+171
+61
+321
+83
 Sliders Agentes:
 18
 0.0
 1
 
 SLIDER
-171
-38
-343
-71
+169
+89
+341
+122
 nbasics
 nbasics
 0
@@ -345,39 +360,49 @@ NIL
 HORIZONTAL
 
 SLIDER
-171
-71
-343
-104
+169
+122
+341
+155
 nexperts
 nexperts
 0
 100
-0.0
+15.0
 1
 1
 NIL
 HORIZONTAL
 
 TEXTBOX
-172
-113
-322
-147
+170
+164
+320
+198
 Basics - Branco\nExperts - Magenta
 14
 0.0
 1
 
 TEXTBOX
-12
-175
-162
-243
+10
+226
+160
+294
 Basics Food - Amarelo\nExperts Food - Verde\nArmadilhas - Vermelho\nAbrigos - Azul
 14
 0.0
 1
+
+CHOOSER
+9
+10
+147
+55
+versão-modelo
+versão-modelo
+"base" "melhorado"
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -721,7 +746,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
