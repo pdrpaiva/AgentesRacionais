@@ -11,21 +11,28 @@ to Setup
 end
 
 to Go
-  if not any? turtles [ stop ] ; para se não houverem agentes
+  ;;if not any? turtles [ stop ] ; para se não houverem agentes
 
   ask basics[
     MoveBasics
     Basic-Food
     Basic-Armadilha
-    Death
+    Check-Abrigo
+    Ocupa-Abrigo
+    ;;Death
   ]
 
   ask experts[
     MoveExperts
     Expert-Food
     Expert-Armadilha
-    Death
+    Check-Abrigo
+    Ocupa-Abrigo
+    ;;Death
   ]
+  tick
+  if count turtles = 0 or ticks = 1001
+  [stop]
 end
 
 to Setup-Patches
@@ -67,20 +74,16 @@ to Setup-Turtles
     set heading 0
     set color white
     set energy 100
-    set size 1.5
-    setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = black]
-      [setxy random-xcor random-ycor]
+    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
+    setxy [pxcor] of x [pycor] of x
   ]
 
   create-experts nexperts[
     set heading 0
     set color magenta
     set energy 100
-    set size 1.5
-    setxy random-xcor random-ycor
-    while [ [pcolor] of patch-here = black]
-      [setxy random-xcor random-ycor]
+    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
+    setxy [pxcor] of x [pycor] of x
   ]
 
 end
@@ -159,7 +162,7 @@ to MoveExperts
 end
 
 to Death
-  if energy < 0 [ die ] ; os agentes morrem quando a energia chega a 0
+  if energy <= 0 [ die ] ; os agentes morrem quando a energia chega a 0
 end
 
 to Basic-Food
@@ -170,19 +173,20 @@ to Basic-Food
 end
 
 to Expert-Food
-  if [pcolor] of patch-here = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
+  ifelse [pcolor] of patch-here = green [ ; se o patch for verde, transforma-o em preto e o agent expert ganha 10 de energia
     set pcolor black
     set energy energy + 10
     set alimento alimento + 1 ;o alimento incrementa
     if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 2] ;se o resto da divisao do alimento por 10 for 0 ganha 2 de xp
 
-  ]
-  if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent expert ganha 5 de energia
+  ][
+    if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent expert ganha 5 de energia
     set pcolor black
     set energy energy + 5
     set alimento alimento + 1 ;o alimento incrementa
     if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 1] ;se o resto da divisao do alimento por 10 for 0 ganha 1 de xp
-  ]
+  ]]
+
 end
 
 to Basic-Armadilha
@@ -215,16 +219,26 @@ to Check-Abrigo
   ]
 
   ask experts [
-    let x one-of patches with [pcolor] = blue
     (ifelse
+      ;se o abrigo estiver vazio
       [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
-        [move-to x ] ;
+        [fd 1 Ocupa-Abrigo] ;
 
-      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead  1 = blue;se não houver algum expert nos abrigos
-        [move-to x ] ;
+      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [rt 90 fd 1 Ocupa-Abrigo] ;
 
-      [pcolor] of patch-left-and-ahead 1 = blue and not any? experts-on patch-left-and-ahead 1 = blue;se não houver algum expert nos abrigos
-        [move-to x ] ;
+      [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [lt 90 fd 1 Ocupa-Abrigo] ;
+
+      ;se já estiver um expert no abrigo
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+        [rt 90 fd 1]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [] ;
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [] ;
       ;else
       [
         Go
@@ -233,11 +247,18 @@ to Check-Abrigo
 end
 
 to Ocupa-Abrigo
-  if [pcolor] of patch-here = blue [
+  ifelse [pcolor] of patch-here = blue [
    set tempo-descanso tempo-descanso + 1
-  ]
 
-  if tempo-descanso =  10 [set energy energy + 500 set xp xp + 25 Go] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
+    (ifelse
+    tempo-descanso =  10 and energy < 500 and xp < 50
+      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
+    ;else
+    [
+      if tempo-descanso > 10
+      [MoveExperts]
+    ])
+  ][MoveExperts]
 end
 ;MODELO MELHORADO
 @#$#@#$#@
@@ -292,7 +313,7 @@ BUTTON
 55
 NIL
 Go
-T
+NIL
 1
 T
 OBSERVER
@@ -356,7 +377,7 @@ abrigos
 abrigos
 1
 10
-4.0
+10.0
 1
 1
 NIL
@@ -391,7 +412,7 @@ nbasics
 nbasics
 0
 100
-10.0
+0.0
 1
 1
 NIL
@@ -406,7 +427,7 @@ nexperts
 nexperts
 0
 100
-15.0
+11.0
 1
 1
 NIL
@@ -784,7 +805,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.3.0
+NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
