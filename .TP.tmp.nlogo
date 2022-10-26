@@ -202,10 +202,13 @@ end
 
 to Check-Abrigo
   ask basics [
+
     (ifelse
-      any? experts-on [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = blue ;se houver algum expert nos abrigos
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
         [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
 
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
       ;else
       [
         Go
@@ -213,9 +216,10 @@ to Check-Abrigo
   ]
 
   ask experts [
+    let x one-of patches with [pcolor] = blue
     (ifelse
       not any? experts-on [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = blue or [pcolor] of patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [m] ;
+        [move-to x ] ;
 
       ;else
       [
