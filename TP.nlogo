@@ -217,10 +217,13 @@ to Check-Abrigo
   ask experts [
     let x one-of patches with [pcolor] = blue
     (ifelse
-      not any? experts-on [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = blue or [pcolor] of patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
         [move-to x ] ;
 
-      not any? experts-on [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = blue or [pcolor] of patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+        [move-to x ] ;
+
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
         [move-to x ] ;
       ;else
       [
