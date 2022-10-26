@@ -202,7 +202,6 @@ end
 
 to Check-Abrigo
   ask basics [
-
     (ifelse
       [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
         [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
@@ -220,6 +219,7 @@ to Check-Abrigo
     (ifelse
       not any? experts-on [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = blue or [pcolor] of patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
         [move-to x ] ;
+
 
       ;else
       [
