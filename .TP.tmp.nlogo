@@ -5,9 +5,9 @@ turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
 
 to Setup
-  reset-ticks
   Setup-Patches
   Setup-Turtles
+  reset-ticks
 end
 
 to Go
@@ -32,61 +32,10 @@ to Go
   ]
   tick
   if count turtles = 0 or ticks = 1001
-  [stop]
+   [stop]
 end
 
-to Setup-Patches
-  clear-all
-  set-patch-size 15
-  reset-ticks
 
-  ask patches [ set pcolor black] ;background
-
-  ask patches
-  [
-    if random 101 < alimento_verde ;gera o alimento verde com base no slider da interface
-    [
-      set pcolor green
-    ]
-
-    if random 101 < alimento_amarelo ;gera o alimento amarelo com base no slider da interface
-    [
-      set pcolor yellow
-    ]
-
-    if random 101 < armadilhas ;gera as armadilhas com base no slider da interface
-    [
-      set pcolor red
-    ]
-  ]
-
-  ask n-of abrigos patches
-  [
-    set pcolor blue
-  ]
-
-end
-
-to Setup-Turtles
-  clear-turtles
-
-  create-basics nbasics[
-    set heading 0
-    set color white
-    set energy 100
-    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
-    setxy [pxcor] of x [pycor] of x
-  ]
-
-  create-experts nexperts[
-    set heading 0
-    set color magenta
-    set energy 100
-    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
-    setxy [pxcor] of x [pycor] of x
-  ]
-
-end
 
 to Perde-Energia ;NÃO FAZ PARTE
   set energy energy - 1
@@ -235,10 +184,21 @@ to Check-Abrigo
         [rt 90 fd 1]
 
       [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [] ;
+        [fd 1] ;
 
       [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [] ;
+        [fd 1] ;
+
+      ;se os experts percecionarem um basic
+      any? basics-on patch-ahead 1
+        []
+
+      any? basics-on patch-right-and-ahead 90 1
+        []
+
+      any? basics-on patch-left-and-ahead 90 1
+        []
+
       ;else
       [
         Go
@@ -260,6 +220,7 @@ to Ocupa-Abrigo
     ])
   ][MoveExperts]
 end
+
 ;MODELO MELHORADO
 @#$#@#$#@
 GRAPHICS-WINDOW

@@ -5,9 +5,9 @@ turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
 
 to Setup
-  reset-ticks
   Setup-Patches
   Setup-Turtles
+  reset-ticks
 end
 
 to Go
@@ -37,8 +37,8 @@ end
 
 to Setup-Patches
   clear-all
-  set-patch-size 15
-  reset-ticks
+  ;set-patch-size 15
+  ;reset-ticks
 
   ask patches [ set pcolor black] ;background
 
@@ -239,6 +239,17 @@ to Check-Abrigo
 
       [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
         [fd 1] ;
+
+      ;se os experts percecionarem um basic
+      any? basics-on patch-ahead 1
+        []
+
+      any? basics-on patch-right-and-ahead 90 1
+        []
+
+      any? basics-on patch-left-and-ahead 90 1
+        []
+
       ;else
       [
         Go
@@ -260,6 +271,7 @@ to Ocupa-Abrigo
     ])
   ][MoveExperts]
 end
+
 ;MODELO MELHORADO
 @#$#@#$#@
 GRAPHICS-WINDOW
