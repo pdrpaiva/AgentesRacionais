@@ -14,14 +14,13 @@ to Go
   ;;if not any? turtles [ stop ] ; para se não houverem agentes
 
     MoveBasics
-  Check-Abrigo
     MoveExperts
     Basic-Food
     Expert-Food
-    Basic-Armadilha
+    ;Basic-Armadilha
     ;Expert-Armadilha
-
-    ;Ocupa-Abrigo
+    Check-Abrigo
+    Ocupa-Abrigo
     ;;Death
 
   tick
@@ -160,7 +159,7 @@ to MoveExperts
       ;[pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       ;[fd 1 Perde-Energia]
 
-      [pcolor] of patch-here = blue []
+
 
       ;se os experts percecionarem um basic
       any? basics-on patch-ahead 1
@@ -247,7 +246,7 @@ to Check-Abrigo
         [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
       ;else
       [
-        ;MoveBasics
+        MoveBasics
       ])
   ]
 
@@ -273,11 +272,11 @@ to Check-Abrigo
       [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
         [fd 1 Perde-Energia] ;
 
-      [pcolor] of patch-here = blue [contador]
+      [pcolor] of patch-here = blue [Ocupa-Abrigo]
 
       ;else
       [
-        ;MoveExperts
+        MoveExperts
       ])
   ]
 end
@@ -297,12 +296,6 @@ to Ocupa-Abrigo
 
     ])
   ][MoveExperts]
-  ]
-end
-
-to contador
-  ask experts [
-  (ifelse tempo-descanso = 10 [set tempo-descanso 0 fd 1][set tempo-descanso tempo-descanso + 1])
   ]
 end
 
@@ -359,7 +352,7 @@ BUTTON
 55
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
