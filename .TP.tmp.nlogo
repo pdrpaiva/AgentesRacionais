@@ -14,12 +14,12 @@ to Go
   ;;if not any? turtles [ stop ] ; para se não houverem agentes
 
     MoveBasics
-  Check-Abrigo
+    Check-Abrigo
     MoveExperts
     Basic-Food
     Expert-Food
     Basic-Armadilha
-    ;Expert-Armadilha
+    Expert-Armadilha
 
     ;Ocupa-Abrigo
     ;;Death
@@ -109,20 +109,18 @@ to MoveBasics
       [fd 1 Perde-Energia]
 
       ;any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue
-      ;  [
-      ;  (ifelse
-      ;    xp < 50 [
-
-      ;    ]
+        ;[
+        ;(ifelse
+          ;xp < 50 [
+            ;set energy energy + (energy-expert / 2)
+          ;]
           ; elsecommands
-      ;    [
-      ;      set energy energy - (energy * 0.10)
-      ;  ])
+          ;[
+            ;set energy energy - (energy * 0.10)
+        ;])
+        ;]
 
-      ;  ]
 
-      ;any? experts-on patch-right-and-ahead 90 1 and [pcolor] of patch-right-and-ahead 90 1 != blue
-      ;  []
 
       ; else
       [
@@ -254,7 +252,7 @@ to Check-Abrigo
   ask experts [
     (ifelse
       ;se o abrigo estiver vazio
-      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue ;se não houver algum expert nos abrigos
         [fd 1 Perde-Energia Ocupa-Abrigo] ;
 
       [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
@@ -264,13 +262,13 @@ to Check-Abrigo
         [lt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
 
       ;se já estiver um expert no abrigo
-      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
         [rt 90 fd 1 Perde-Energia]
 
-      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se houver algum expert nos abrigos
         [fd 1 Perde-Energia] ;
 
-      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
         [fd 1 Perde-Energia] ;
 
       [pcolor] of patch-here = blue [contador]
@@ -288,7 +286,7 @@ to Ocupa-Abrigo
      set tempo-descanso tempo-descanso + 1
 
     (ifelse
-    tempo-descanso =  10 and energy < 500 and xp < 50
+    tempo-descanso =  10 ;and energy < 500 or xp < 50
       [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
     ;else
     [
@@ -302,7 +300,7 @@ end
 
 to contador
   ask experts [
-  (ifelse tempo-descanso = 10 [set tempo-descanso 0 fd 1][set tempo-descanso tempo-descanso + 1])
+  (ifelse tempo-descanso = 10 [set tempo-descanso 0 set energy energy + 500 set xp xp + 25 fd 1][set tempo-descanso tempo-descanso + 1])
   ]
 end
 
