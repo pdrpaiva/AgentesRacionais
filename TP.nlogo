@@ -14,7 +14,6 @@ to Go
   ;;if not any? turtles [ stop ] ; para se não houverem agentes
 
     MoveBasics
-    Check-Abrigo
     MoveExperts
     Basic-Food
     Expert-Food
@@ -108,6 +107,12 @@ to MoveBasics
       [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       [fd 1 Perde-Energia]
 
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+
       ;any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue
         ;[
         ;(ifelse
@@ -158,7 +163,30 @@ to MoveExperts
       ;[pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       ;[fd 1 Perde-Energia]
 
+      [pcolor] of patch-here = blue [contador]
+
       [pcolor] of patch-here = blue []
+
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+        [fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [rt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [lt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      ;se já estiver um expert no abrigo
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
+        [rt 90 fd 1 Perde-Energia]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se houver algum expert nos abrigos
+        [fd 1 Perde-Energia] ;
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
+        [fd 1 Perde-Energia] ;
+
+
 
       ;se os experts percecionarem um basic
       any? basics-on patch-ahead 1
@@ -235,51 +263,6 @@ to Expert-Armadilha
  ]
 end
 
-to Check-Abrigo
-  ask basics [
-    (ifelse
-      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
-        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
-
-      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
-        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
-      ;else
-      [
-        ;MoveBasics
-      ])
-  ]
-
-  ask experts [
-    (ifelse
-      ;se o abrigo estiver vazio
-      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue and energy < 500 or xp < 50;se não houver algum expert nos abrigos
-        [fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue and energy < 500 or xp < 50;se não houver algum expert nos abrigos
-        [rt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue and energy < 500 or xp < 50;se não houver algum expert nos abrigos
-        [lt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      ;se já estiver um expert no abrigo
-      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
-        [rt 90 fd 1 Perde-Energia]
-
-      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se houver algum expert nos abrigos
-        [fd 1 Perde-Energia] ;
-
-      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
-        [fd 1 Perde-Energia] ;
-
-      [pcolor] of patch-here = blue [contador]
-
-      ;else
-      [
-        ;MoveExperts
-      ])
-  ]
-end
-
 to Ocupa-Abrigo
   ask experts [
   ifelse [pcolor] of patch-here = blue [
@@ -300,7 +283,7 @@ end
 
 to contador
   ask experts [
-  (ifelse tempo-descanso = 10 [set tempo-descanso 0 set energy energy + 500 set xp xp + 25 fd 1][set tempo-descanso tempo-descanso + 1])
+  (ifelse tempo-descanso = 10 [set tempo-descanso 0 set energy energy + 500 set xp xp + 25 fd 1][set tempo-descanso tempo-descanso + 1]);
   ]
 end
 
