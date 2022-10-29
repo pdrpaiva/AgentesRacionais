@@ -263,23 +263,23 @@ to Expert-Armadilha
  ]
 end
 
-to Ocupa-Abrigo
-  ask experts [
-  ifelse [pcolor] of patch-here = blue [
-     set tempo-descanso tempo-descanso + 1
+;to Ocupa-Abrigo
+;  ask experts [
+;  ifelse [pcolor] of patch-here = blue [
+;     set tempo-descanso tempo-descanso + 1
 
-    (ifelse
-    tempo-descanso =  10 ;and energy < 500 or xp < 50
-      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
+;    (ifelse
+;    tempo-descanso =  10 ;and energy < 500 or xp < 50
+;      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
     ;else
-    [
-      if tempo-descanso > 10
-      [set tempo-descanso 0 MoveExperts]
+;    [
+;      if tempo-descanso > 10
+;      [set tempo-descanso 0 MoveExperts]
 
-    ])
-  ][MoveExperts]
-  ]
-end
+;    ])
+;  ][MoveExperts]
+;  ]
+;end
 
 to contador
   ask experts [
