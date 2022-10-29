@@ -142,7 +142,6 @@ end
 to MoveExperts
   ask experts[
     (ifelse
-      ;comida
       [pcolor] of patch-ahead 1 = green or [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1 Perde-Energia]
 
@@ -152,7 +151,6 @@ to MoveExperts
       [pcolor] of patch-left-and-ahead 90 1 = green or [pcolor] of patch-left-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
       [lt 90 fd 1 Perde-Energia]
 
-      ;armadilhas
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
       [rt 90 fd 1 Perde-Energia]
 
@@ -170,7 +168,7 @@ to MoveExperts
 
       [pcolor] of patch-here = blue [contador]
 
-      ;[pcolor] of patch-here = blue []
+      [pcolor] of patch-here = blue []
 
       [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
         [fd 1 Perde-Energia ] ;Ocupa-Abrigo
@@ -268,23 +266,23 @@ to Expert-Armadilha
  ]
 end
 
-;to Ocupa-Abrigo
-;  ask experts [
-;  ifelse [pcolor] of patch-here = blue [
-;     set tempo-descanso tempo-descanso + 1
+to Ocupa-Abrigo
+  ask experts [
+  ifelse [pcolor] of patch-here = blue [
+     set tempo-descanso tempo-descanso + 1
 
-;    (ifelse
-;    tempo-descanso =  10 ;and energy < 500 or xp < 50
-;      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
+    (ifelse
+    tempo-descanso =  10 ;and energy < 500 or xp < 50
+      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
     ;else
-;    [
-;      if tempo-descanso > 10
-;      [set tempo-descanso 0 MoveExperts]
+    [
+      if tempo-descanso > 10
+      [set tempo-descanso 0 MoveExperts]
 
-;    ])
-;  ][MoveExperts]
-;  ]
-;end
+    ])
+  ][MoveExperts]
+  ]
+end
 
 to contador
   ask experts [
