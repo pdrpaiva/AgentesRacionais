@@ -157,6 +157,9 @@ to MoveExperts
       [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
       [fd 1 Perde-Energia]
 
+      [pcolor] of patch-left-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1 Perde-Energia]
+
       ;[pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
       ;[fd 1 Ocupa-Abrigo]
 
@@ -171,10 +174,10 @@ to MoveExperts
         [fd 1 Perde-Energia ] ;Ocupa-Abrigo
 
       [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [rt 90 fd 1 Perde-Energia ] ;
+        [rt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
 
       [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [lt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
+        [lt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
 
       ;se já estiver um expert no abrigo
       [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
@@ -854,7 +857,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

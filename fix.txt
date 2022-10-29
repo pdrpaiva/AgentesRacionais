@@ -1,1 +1,2 @@
-os agents qnd passam em cima do patch do alimento só comem alguns
+quando dois experts estao em abrigos separados só um deles é que cumpre a restrição dos 10 ticks
+o expert vai para um abrigo ocupado
