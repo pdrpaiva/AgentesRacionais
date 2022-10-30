@@ -537,7 +537,7 @@ BUTTON
 56
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -635,8 +635,8 @@ SLIDER
 nbasics
 nbasics
 0
-50
-50.0
+30
+2.0
 1
 1
 NIL
@@ -651,7 +651,7 @@ nexperts
 nexperts
 0
 25
-5.0
+0.0
 1
 1
 NIL
@@ -770,7 +770,7 @@ nregens
 nregens
 0
 5
-1.0
+3.0
 1
 1
 NIL
@@ -1132,6 +1132,40 @@ NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="teste" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
