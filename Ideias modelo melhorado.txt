@@ -1,4 +1,0 @@
-shapes
-energy drinks q dão +10 de energia
-switch show energy
-alimento raro só para os basic, se os expertem comerem perdem energia
