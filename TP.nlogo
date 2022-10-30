@@ -24,7 +24,7 @@ to Go
     ;;Death
 
   tick
-  if count turtles = 0 or ticks = 1001 [stop]
+  if count turtles = 0 or ticks = 501 [stop]
 end
 
 
@@ -159,6 +159,8 @@ to MoveBasics
         )
       ]
     )
+
+    Death
   ]
 end
 
@@ -258,6 +260,7 @@ to MoveExperts
 
       set energy energy + basicEnergy ;o expert fica com a energia do basic q matou
 
+    Death
   ]
 end
 
