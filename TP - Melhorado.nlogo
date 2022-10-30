@@ -386,7 +386,14 @@ to contador
   ]
 end
 
-;MODELO MELHORADO
+to Reproduz
+  ask basics [
+    if energy > 100 [
+      set energy energy - 50
+      hatch 1 [ set energy 50 ]
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 349

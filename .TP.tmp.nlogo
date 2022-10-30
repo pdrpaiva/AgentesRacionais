@@ -233,8 +233,8 @@ to MoveExperts
        [
        ask one-of basics-on patch-ahead 1
         [
-          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
-          die ; o agent basic morre
+          set basicEnergy basicEnergy + energy
+          die
         ]
        ]
     ;se os experts percecionarem um basic no patch-right-and-ahead
@@ -242,8 +242,7 @@ to MoveExperts
        [
        ask one-of basics-on patch-right-and-ahead 90 1
         [
-          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
-          die ; o agent basic morre
+
         ]
        ]
     ;se os experts percecionarem um basic no patch-left-and-ahead
@@ -256,7 +255,7 @@ to MoveExperts
         ]
        ]
 
-      set energy energy + basicEnergy ;o expert fica com a energia do basic q matou
+      set energy energy + basicEnergy
 
   ]
 end
