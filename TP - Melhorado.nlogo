@@ -1,5 +1,6 @@
 breed [basics basic] ;cria agentes do tipo basic
 breed [experts expert] ;cria agentes do tipo expert
+breed [regens regen]
 
 turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
@@ -15,8 +16,10 @@ to Go
 
     MoveBasics
     MoveExperts
+    MoveRegens
     Basic-Food
     Expert-Food
+    Reproduz
     Basic-Armadilha
     Expert-Armadilha
 
@@ -66,7 +69,7 @@ to Setup-Turtles
     set heading 0
     set color white
     set energy 100
-    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
+    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here and not any? regens-here]
     setxy [pxcor] of x [pycor] of x
   ]
 
@@ -75,6 +78,16 @@ to Setup-Turtles
     set color magenta
     set energy 100
     set tempo-descanso 0
+    let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here and not any? regens-here]
+    setxy [pxcor] of x [pycor] of x
+  ]
+
+  create-regens nregens [
+    set heading 0
+    set color pink
+    set shape "circle 2"
+    set size 1
+    set energy 1
     let x one-of patches with[pcolor = black and not any? Basics-here and not any? Experts-here]
     setxy [pxcor] of x [pycor] of x
   ]
@@ -210,6 +223,17 @@ to MoveBasics
         )
       ]
     )
+
+    ;se o expert percecionar uma ambulancia e estiver com menos de 20 de energia
+      if any? regens-on patch-ahead 1 and energy < 20
+      [set energy 100] ;restaura a energia
+
+      if any? regens-on patch-right-and-ahead 90 1 and energy < 20
+      [set energy 100]
+
+      if any? regens-on patch-right-and-ahead 90 1 and energy < 20
+      [set energy 100]
+
   ]
 end
 
@@ -299,6 +323,73 @@ to MoveExperts
         );]
       ]
     )
+
+    ;se os experts percecionarem um basic no patch-ahead 1
+      if any? basics-on patch-ahead 1
+       [
+       ask one-of basics-on patch-ahead 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+    ;se os experts percecionarem um basic no patch-right-and-ahead
+      if any? basics-on patch-right-and-ahead 90 1
+       [
+       ask one-of basics-on patch-right-and-ahead 90 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+    ;se os experts percecionarem um basic no patch-left-and-ahead
+      if any? basics-on patch-left-and-ahead 90 1
+       [
+       ask one-of basics-on patch-left-and-ahead 90 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+
+      set energy energy + basicEnergy ;o expert fica com a energia do basic q matou
+
+      ;se o expert percecionar uma ambulancia e estiver com menos de 20 de energia
+      if any? regens-on patch-ahead 1 and energy < 20
+      [set energy energy + 25] ;recupera 25
+
+      if any? regens-on patch-right-and-ahead 90 1 and energy < 20
+      [set energy energy + 25]
+
+      if any? regens-on patch-right-and-ahead 90 1 and energy < 20
+      [set energy energy + 25]
+  ]
+end
+
+to MoveRegens
+  ask regens[
+  (ifelse
+
+  [pcolor] of patch-ahead 1 = green or [pcolor] of patch-ahead 1 = yellow or [pcolor] of patch-ahead 1 = red or [pcolor] of patch-ahead 1 = blue or [pcolor] of patch-ahead 1 = orange;se estiver comida à frente, segue em frente p/ comer
+  [rt 90 fd 1]
+
+  [pcolor] of patch-right-and-ahead 90 1 = green or [pcolor] of patch-right-and-ahead 90 1 = yellow or [pcolor] of patch-right-and-ahead 90 1 = red or [pcolor] of patch-right-and-ahead 90 1 = blue or [pcolor] of patch-right-and-ahead 90 1 = orange;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
+  [fd 1]
+
+  [pcolor] of patch-left-and-ahead 90 1 = green or [pcolor] of patch-left-and-ahead 90 1 = yellow or [pcolor] of patch-left-and-ahead 90 1 = red or [pcolor] of patch-left-and-ahead 90 1 = blue or [pcolor] of patch-left-and-ahead 90 1 = orange;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
+  [fd 1]
+
+  ; else
+  [
+  ;if [pcolor] of patch-ahead 1 = black or [pcolor] of patch-right-and-ahead 90 1 = black or [pcolor] of patch-left-and-ahead 90 1 = black [
+  (ifelse
+  random 101 <= 50 [fd 1]
+
+  random 101 <= 50 [rt 90 fd 1]
+
+  random 101 <= 50 [lt 90 fd 1]
+  );]
+  ])
   ]
 end
 
@@ -313,9 +404,9 @@ to Basic-Food
     set energy energy + 10
   ]
 
-  if [pcolor] of patch-here = orange [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
+  if [pcolor] of patch-here = orange [ ; se o patch for laranja, transforma-o em preto e o agent basic ganha 200 de energia
     set pcolor black
-    set energy energy + 500
+    set energy energy + 100
   ]
   ]
 end
@@ -388,21 +479,21 @@ end
 
 to Reproduz
   ask basics [
-    if energy > 100 [
-      set energy energy - 50
-      hatch 1 [ set energy 50 ]
+    if energy > 110 [ ;se a energia for superior a 110
+      set energy energy - 25 ;perde 25
+      hatch 1 [ set energy 80 ] ;reproduz um basic com energia de 80
     ]
   ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-349
+454
 10
-852
-514
+1017
+574
 -1
 -1
-15.0
+16.82
 1
 10
 1
@@ -446,7 +537,7 @@ BUTTON
 56
 NIL
 Go
-T
+NIL
 1
 T
 OBSERVER
@@ -510,7 +601,7 @@ abrigos
 abrigos
 1
 10
-5.0
+7.0
 1
 1
 NIL
@@ -544,8 +635,8 @@ SLIDER
 nbasics
 nbasics
 0
-30
-30.0
+50
+50.0
 1
 1
 NIL
@@ -559,7 +650,7 @@ SLIDER
 nexperts
 nexperts
 0
-20
+25
 5.0
 1
 1
@@ -568,10 +659,10 @@ HORIZONTAL
 
 TEXTBOX
 171
-164
+192
 321
-198
-Basics - Branco\nExperts - Magenta
+243
+Basics - Branco\nExperts - Magenta\nRegen - Rosa
 14
 0.0
 1
@@ -597,10 +688,10 @@ versão-modelo
 1
 
 MONITOR
-168
-206
-249
-251
+183
+331
+264
+376
 Basics
 count basics
 17
@@ -608,10 +699,10 @@ count basics
 11
 
 MONITOR
-252
-206
-342
-251
+267
+331
+357
+376
 Experts
 count experts
 17
@@ -619,10 +710,10 @@ count experts
 11
 
 PLOT
-6
-319
-342
-512
+4
+380
+443
+573
 Basics vs Experts
 ticks
 turtles
@@ -638,10 +729,10 @@ PENS
 "experts" 1.0 0 -5825686 true "" "plot count experts"
 
 MONITOR
-168
-261
-250
-306
+5
+331
+87
+376
 Armadilhas
 count patches with [pcolor = red]
 17
@@ -649,15 +740,51 @@ count patches with [pcolor = red]
 11
 
 MONITOR
-253
-261
-342
-306
+90
+331
+179
+376
 Abrigos
 count patches with [pcolor = blue]
 17
 1
 11
+
+MONITOR
+360
+331
+443
+376
+Regens
+count regens
+17
+1
+11
+
+SLIDER
+170
+156
+342
+189
+nregens
+nregens
+0
+5
+1.0
+1
+1
+NIL
+HORIZONTAL
+
+TEXTBOX
+6
+305
+156
+327
+Estatísticas:
+18
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
