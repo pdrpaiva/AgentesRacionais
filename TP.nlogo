@@ -88,6 +88,9 @@ end
 
 to MoveBasics
   ask basics[
+    let x energy
+    let y energy
+
     (ifelse
       [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1 Perde-Energia]
@@ -113,19 +116,39 @@ to MoveBasics
       [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
         [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
 
-      ;any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue
-        ;[
-        ;(ifelse
-          ;xp < 50 [
-            ;set energy energy + (energy-expert / 2)
-          ;]
+      any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-ahead 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set x x + (energy / 2)
+            set energy energy / 2
+          ]
           ; elsecommands
-          ;[
-            ;set energy energy - (energy * 0.10)
-        ;])
-        ;]
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy x
+        ]
+      ]
 
-
+      any? experts-on patch-right-and-ahead 90 1 and [pcolor] of patch-right-and-ahead 90 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-right-and-ahead 90 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set y y + (energy / 2)
+            set energy energy / 2
+          ]
+          ; elsecommands
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy y
+        ]
+      ]
 
       ; else
       [
@@ -140,6 +163,7 @@ to MoveBasics
 end
 
 to MoveExperts
+  let basicEnergy 0
   ask experts[
     (ifelse
       ;comida
@@ -191,17 +215,16 @@ to MoveExperts
       [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
         [fd 1 Perde-Energia] ;
 
-
-
       ;se os experts percecionarem um basic
-      any? basics-on patch-ahead 1
-        []
-
-      any? basics-on patch-right-and-ahead 90 1
-        []
-
-      any? basics-on patch-left-and-ahead 90 1
-        []
+      any? basics-on patch-ahead 1 or any? basics-on patch-right-and-ahead 90 1 or any? basics-on patch-left-and-ahead 90 1
+       [
+       ask one-of basics
+        [
+          die
+          set basicEnergy energy
+        ]
+       set energy energy + basicEnergy
+       ]
 
       ; else
       [
@@ -444,7 +467,7 @@ nbasics
 nbasics
 0
 100
-9.0
+14.0
 1
 1
 NIL
@@ -459,7 +482,7 @@ nexperts
 nexperts
 0
 100
-24.0
+5.0
 1
 1
 NIL
