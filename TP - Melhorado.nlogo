@@ -25,7 +25,7 @@ to Go
     ;Death
 
   tick
-  if count turtles = 0 or ticks = 500 [stop]
+  if count turtles = 0 or ticks = 501 [stop]
 end
 
 
