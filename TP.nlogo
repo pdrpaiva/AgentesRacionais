@@ -88,6 +88,9 @@ end
 
 to MoveBasics
   ask basics[
+    let x energy
+    let y energy
+
     (ifelse
       [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1 Perde-Energia]
@@ -113,19 +116,39 @@ to MoveBasics
       [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
         [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
 
-      ;any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue
-        ;[
-        ;(ifelse
-          ;xp < 50 [
-            ;set energy energy + (energy-expert / 2)
-          ;]
+      any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-ahead 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set x x + (energy / 2)
+            set energy energy / 2
+          ]
           ; elsecommands
-          ;[
-            ;set energy energy - (energy * 0.10)
-        ;])
-        ;]
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy x
+        ]
+      ]
 
-
+      any? experts-on patch-right-and-ahead 90 1 and [pcolor] of patch-right-and-ahead 90 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-right-and-ahead 90 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set y y + (energy / 2)
+            set energy energy / 2
+          ]
+          ; elsecommands
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy y
+        ]
+      ]
 
       ; else
       [
@@ -140,6 +163,7 @@ to MoveBasics
 end
 
 to MoveExperts
+  let basicEnergy 0
   ask experts[
     (ifelse
       ;comida
@@ -191,18 +215,6 @@ to MoveExperts
       [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
         [fd 1 Perde-Energia] ;
 
-
-
-      ;se os experts percecionarem um basic
-      any? basics-on patch-ahead 1
-        []
-
-      any? basics-on patch-right-and-ahead 90 1
-        []
-
-      any? basics-on patch-left-and-ahead 90 1
-        []
-
       ; else
       [
       ;if [pcolor] of patch-ahead 1 = black or [pcolor] of patch-right-and-ahead 90 1 = black or [pcolor] of patch-left-and-ahead 90 1 = black [
@@ -215,6 +227,37 @@ to MoveExperts
         );]
       ]
     )
+
+    ;se os experts percecionarem um basic no patch-ahead 1
+      if any? basics-on patch-ahead 1
+       [
+       ask one-of basics-on patch-ahead 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+    ;se os experts percecionarem um basic no patch-right-and-ahead
+      if any? basics-on patch-right-and-ahead 90 1
+       [
+       ask one-of basics-on patch-right-and-ahead 90 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+    ;se os experts percecionarem um basic no patch-left-and-ahead
+      if any? basics-on patch-left-and-ahead 90 1
+       [
+       ask one-of basics-on patch-left-and-ahead 90 1
+        [
+          set basicEnergy basicEnergy + energy ; guarda a energia do basic na var basicEnergy
+          die ; o agent basic morre
+        ]
+       ]
+
+      set energy energy + basicEnergy ;o expert fica com a energia do basic q matou
+
   ]
 end
 
@@ -295,9 +338,9 @@ end
 ;MODELO MELHORADO
 @#$#@#$#@
 GRAPHICS-WINDOW
-353
+370
 10
-856
+873
 514
 -1
 -1
@@ -322,10 +365,10 @@ ticks
 30.0
 
 BUTTON
-168
-11
-249
-56
+173
+413
+254
+458
 NIL
 Setup
 NIL
@@ -339,10 +382,10 @@ NIL
 1
 
 BUTTON
-254
-10
-341
-55
+259
+413
+346
+458
 NIL
 Go
 NIL
@@ -426,50 +469,50 @@ Sliders Ambiente:
 1
 
 TEXTBOX
-171
-61
-321
-83
+9
+301
+159
+323
 Sliders Agentes:
 18
 0.0
 1
 
 SLIDER
-169
-89
-341
-122
+7
+329
+149
+362
 nbasics
 nbasics
 0
 100
-9.0
+14.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-169
-122
-341
-155
+7
+362
+149
+395
 nexperts
 nexperts
 0
 100
-24.0
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 TEXTBOX
-170
-164
-320
-198
+8
+404
+158
+438
 Basics - Branco\nExperts - Magenta
 14
 0.0
@@ -496,26 +539,99 @@ versão-modelo
 0
 
 MONITOR
-167
-206
-248
-251
-NIL
+173
+89
+254
+134
+Basics
 count basics
 17
 1
 11
 
 MONITOR
-251
-206
-341
-251
-NIL
+257
+89
+347
+134
+Experts
 count experts
 17
 1
 11
+
+PLOT
+174
+248
+348
+396
+Basics vs Experts
+ticks
+turtles
+0.0
+25.0
+0.0
+25.0
+true
+false
+"" ""
+PENS
+"basics" 1.0 0 -16777216 true "" "plot count bascics"
+"experts" 1.0 0 -5825686 true "" "plot count experts"
+
+MONITOR
+173
+141
+254
+186
+Abrigos
+count patches with [pcolor = blue]
+17
+1
+11
+
+MONITOR
+257
+141
+347
+186
+Armadilhas
+count patches with [pcolor = red]
+17
+1
+11
+
+MONITOR
+173
+193
+254
+238
+A. Verde
+count patches with [pcolor = green]
+17
+1
+11
+
+MONITOR
+257
+193
+347
+238
+A. Amarelo
+count patches with [pcolor = yellow]
+17
+1
+11
+
+TEXTBOX
+172
+61
+322
+83
+Estatísticas:
+18
+0.0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?

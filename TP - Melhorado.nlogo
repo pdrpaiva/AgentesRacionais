@@ -14,7 +14,6 @@ to Go
   ;;if not any? turtles [ stop ] ; para se não houverem agentes
 
     MoveBasics
-    Check-Abrigo
     MoveExperts
     Basic-Food
     Expert-Food
@@ -25,7 +24,7 @@ to Go
     ;;Death
 
   tick
-  if count turtles = 0 or ticks = 1001 [stop]
+  if count turtles = 0 or ticks = 500 [stop]
 end
 
 
@@ -58,7 +57,6 @@ to Setup-Patches
   [
     set pcolor blue
   ]
-
 end
 
 to Setup-Turtles
@@ -88,7 +86,17 @@ to Perde-Energia ;NÃO FAZ PARTE
 end
 
 to MoveBasics
+
+  ;faz com que apareça um patch laranja random a cada 7 ticks (isto só até ao tick 200)
+  if ticks - (int (ticks / 7)) * 7 = 0 and ticks < 200 ;se o resto da divisao dos ticks por 5 for 0 spawna um patch laranja num sitio random
+  [
+    ask one-of patches with[pcolor = black] [set pcolor orange]
+  ]
+
   ask basics[
+    let x energy
+    let y energy
+
     (ifelse
       [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1 Perde-Energia]
@@ -96,11 +104,19 @@ to MoveBasics
       [pcolor] of patch-right-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
       [rt 90 fd 1 Perde-Energia]
 
+      [pcolor] of patch-left-and-ahead 90 1 = yellow ;se estiver comida à esq, roda 90 p/ esq e segue em frente p/ comer
+      [lt 90 fd 1 Perde-Energia]
+
+
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
       [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
       [fd 1 Perde-Energia]
+
+      [pcolor] of patch-left-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1 Perde-Energia]
+
 
       [pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
       [rt 90 fd 1 Perde-Energia]
@@ -108,19 +124,80 @@ to MoveBasics
       [pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       [fd 1 Perde-Energia]
 
-      ;any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue
-        ;[
-        ;(ifelse
-          ;xp < 50 [
-            ;set energy energy + (energy-expert / 2)
-          ;]
+      [pcolor] of patch-left-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
+      [fd 1 Perde-Energia]
+
+
+      ;[pcolor] of patch-ahead 1 = orange ;se estiver comida à frente, segue em frente p/ comer
+      ;[fd 1 Perde-Energia]
+
+      ;[pcolor] of patch-right-and-ahead 90 1 = orange ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
+      ;[rt 90 fd 1 Perde-Energia]
+
+      ;[pcolor] of patch-left-and-ahead 90 1 = orange ;se estiver comida à esq, roda 90 p/ esq e segue em frente p/ comer
+      ;[lt 90 fd 1 Perde-Energia]
+
+
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
+        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+
+
+      any? experts-on patch-ahead 1 and [pcolor] of patch-ahead 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-ahead 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set x x + (energy / 2)
+            set energy energy / 2
+          ]
           ; elsecommands
-          ;[
-            ;set energy energy - (energy * 0.10)
-        ;])
-        ;]
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy x
+        ]
+      ]
 
+      any? experts-on patch-right-and-ahead 90 1 and [pcolor] of patch-right-and-ahead 90 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-right-and-ahead 90 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set y y + (energy / 2)
+            set energy energy / 2
+          ]
+          ; elsecommands
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy y
+        ]
+      ]
 
+      any? experts-on patch-left-and-ahead 90 1 and [pcolor] of patch-left-and-ahead 90 1 != blue ;ve se há algum expert fora do abrigo
+      [
+        ask Experts-on patch-left-and-ahead 90 1
+        [
+        (ifelse
+          xp < 50 [ ;se o seu lvl de xp for inferior a 50 absorve metade da sua energia
+            set y y + (energy / 2)
+            set energy energy / 2
+          ]
+          ; elsecommands
+          [
+            set energy energy - (energy * 0.10) ;senao perde 10% da sua energia atual
+        ])
+          set energy y
+        ]
+      ]
 
       ; else
       [
@@ -128,6 +205,8 @@ to MoveBasics
           random 101 <= 50 [fd 1 Perde-Energia]
 
           random 101 <= 50 [rt 90 fd 1 Perde-Energia]
+
+          random 101 <= 50 [lt 90 fd 1 Perde-Energia]
         )
       ]
     )
@@ -135,8 +214,10 @@ to MoveBasics
 end
 
 to MoveExperts
+  let basicEnergy 0
   ask experts[
     (ifelse
+      ;comida
       [pcolor] of patch-ahead 1 = green or [pcolor] of patch-ahead 1 = yellow ;se estiver comida à frente, segue em frente p/ comer
       [fd 1 Perde-Energia]
 
@@ -146,10 +227,24 @@ to MoveExperts
       [pcolor] of patch-left-and-ahead 90 1 = green or [pcolor] of patch-left-and-ahead 90 1 = yellow ;se estiver comida à direita, roda 90 p/ direita e segue em frente p/ comer
       [lt 90 fd 1 Perde-Energia]
 
+      ;armadilhas
       [pcolor] of patch-ahead 1 = red ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
       [rt 90 fd 1 Perde-Energia]
 
       [pcolor] of patch-right-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1 Perde-Energia]
+
+      [pcolor] of patch-left-and-ahead 90 1 = red ;se estiver uma armadilha à direita, segue em frente
+      [fd 1 Perde-Energia]
+
+      ;patches laranjas
+      [pcolor] of patch-ahead 1 = orange ;se estiver uma armadilha à frente, roda 90 p/direita e segue em frente
+      [rt 90 fd 1 Perde-Energia]
+
+      [pcolor] of patch-right-and-ahead 90 1 = orange ;se estiver uma armadilha à direita, segue em frente
+      [fd 1 Perde-Energia]
+
+      [pcolor] of patch-left-and-ahead 90 1 = orange ;se estiver uma armadilha à direita, segue em frente
       [fd 1 Perde-Energia]
 
       ;[pcolor] of patch-ahead 1 = blue ;se estiver um abrigo à frente, roda p/ direita e segue em frente
@@ -158,17 +253,39 @@ to MoveExperts
       ;[pcolor] of patch-right-and-ahead 90 1 = blue ;se estiver um abrigo à direita, segue em frente
       ;[fd 1 Perde-Energia]
 
-      [pcolor] of patch-here = blue []
+      [pcolor] of patch-here = blue [contador]
+
+      ;[pcolor] of patch-here = blue []
+
+      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
+        [fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [rt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
+        [lt 90 fd 1 Perde-Energia ] ;Ocupa-Abrigo
+
+      ;se já estiver um expert no abrigo
+      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
+        [rt 90 fd 1 Perde-Energia]
+
+      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se houver algum expert nos abrigos
+        [fd 1 Perde-Energia] ;
+
+      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
+        [fd 1 Perde-Energia] ;
 
       ;se os experts percecionarem um basic
-      any? basics-on patch-ahead 1
-        []
-
-      any? basics-on patch-right-and-ahead 90 1
-        []
-
-      any? basics-on patch-left-and-ahead 90 1
-        []
+      any? basics-on patch-ahead 1 or any? basics-on patch-right-and-ahead 90 1 or any? basics-on patch-left-and-ahead 90 1
+       [
+       ask one-of basics
+        [
+          die
+          set basicEnergy energy
+        ]
+       set energy energy + basicEnergy
+       ]
 
       ; else
       [
@@ -195,6 +312,11 @@ to Basic-Food
     set pcolor black
     set energy energy + 10
   ]
+
+  if [pcolor] of patch-here = orange [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
+    set pcolor black
+    set energy energy + 500
+  ]
   ]
 end
 
@@ -213,12 +335,17 @@ to Expert-Food
     set alimento alimento + 1 ;o alimento incrementa
     if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 1] ;se o resto da divisao do alimento por 10 for 0 ganha 1 de xp
   ]]
+    if [pcolor] of patch-here = orange [ ;se percecionar uma armadilha
+    if xp >= 50 [set pcolor black] ;instrução armadilha não causa dano
+    if xp < 50 and energy >= 100 [set pcolor black set energy energy - (energy * 0.1)] ;perde 10%
+    if xp < 50 and energy < 100 [set pcolor black die] ;morre
+  ]
   ]
 end
 
 to Basic-Armadilha
  ask basics[
- if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red [ ;se percecionar uma armadilha
+ if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red or  [pcolor] of patch-left-and-ahead 90 1 = red[ ;se percecionar uma armadilha
     if energy < 100 [ die ] ;morre se a sua energia for inferior a 100
     if energy >= 100 [ set energy energy - (energy * 0.1)]  ;perde 10% da sua energia se a sua energia for superior a 100
  ]
@@ -235,81 +362,43 @@ to Expert-Armadilha
  ]
 end
 
-to Check-Abrigo
-  ask basics [
-    (ifelse
-      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1;se houver algum expert nos abrigos
-        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
+;to Ocupa-Abrigo
+;  ask experts [
+;  ifelse [pcolor] of patch-here = blue [
+;     set tempo-descanso tempo-descanso + 1
 
-      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1;se houver algum expert nos abrigos
-        [set energy  energy - (energy * 0.05)] ;decrementa 5% da energia
-      ;else
-      [
-        ;MoveBasics
-      ])
-  ]
-
-  ask experts [
-    (ifelse
-      ;se o abrigo estiver vazio
-      [pcolor] of patch-ahead 1 = blue and not any? experts-on patch-ahead 1 = blue;se não houver algum expert nos abrigos
-        [fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      [pcolor] of patch-right-and-ahead 90 1 = blue and not any? experts-on patch-right-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [rt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      [pcolor] of patch-left-and-ahead 90 1 = blue and not any? experts-on patch-left-and-ahead 90 1 = blue;se não houver algum expert nos abrigos
-        [lt 90 fd 1 Perde-Energia Ocupa-Abrigo] ;
-
-      ;se já estiver um expert no abrigo
-      [pcolor] of patch-ahead 1 = blue and any? experts-on patch-ahead 1 = blue;se houver algum expert nos abrigos
-        [rt 90 fd 1 Perde-Energia]
-
-      [pcolor] of patch-right-and-ahead 90 1 = blue and any? experts-on patch-right-and-ahead 90 1 = blue;se houver algum expert nos abrigos
-        [fd 1 Perde-Energia] ;
-
-      [pcolor] of patch-left-and-ahead 90 1 = blue and any? experts-on patch-left-and-ahead 90 1 = blue;se houver algum expert nos abrigos
-        [fd 1 Perde-Energia] ;
-
-      [pcolor] of patch-here = blue [contador]
-
-      ;else
-      [
-        ;MoveExperts
-      ])
-  ]
-end
-
-to Ocupa-Abrigo
-  ask experts [
-  ifelse [pcolor] of patch-here = blue [
-     set tempo-descanso tempo-descanso + 1
-
-    (ifelse
-    tempo-descanso =  10 ;and energy < 500 or xp < 50
-      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
+;    (ifelse
+;    tempo-descanso =  10 ;and energy < 500 or xp < 50
+;      [set energy energy + 500 set xp xp + 25] ;se o tempo de descanso for = 10, aumenta a energia em 500, o xp em 25 e volta à função Go
     ;else
-    [
-      if tempo-descanso > 10
-      [set tempo-descanso 0 MoveExperts]
+;    [
+;      if tempo-descanso > 10
+;      [set tempo-descanso 0 MoveExperts]
 
-    ])
-  ][MoveExperts]
-  ]
-end
+;    ])
+;  ][MoveExperts]
+;  ]
+;end
 
 to contador
   ask experts [
-  (ifelse tempo-descanso = 10 [set tempo-descanso 0 set energy energy + 500 set xp xp + 25 fd 1][set tempo-descanso tempo-descanso + 1])
+  (ifelse tempo-descanso = 10 [set tempo-descanso 0 set energy energy + 500 set xp xp + 25 fd 1][set tempo-descanso tempo-descanso + 1]);
   ]
 end
 
-;MODELO MELHORADO
+to Reproduz
+  ask basics [
+    if energy > 100 [
+      set energy energy - 50
+      hatch 1 [ set energy 50 ]
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-353
+349
 10
-856
+852
 514
 -1
 -1
@@ -334,9 +423,9 @@ ticks
 30.0
 
 BUTTON
-168
+170
 11
-249
+251
 56
 NIL
 Setup
@@ -351,13 +440,13 @@ NIL
 1
 
 BUTTON
-254
-10
-341
-55
+256
+11
+343
+56
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -376,7 +465,7 @@ alimento_verde
 alimento_verde
 0
 15
-12.0
+8.0
 1
 1
 %
@@ -406,7 +495,7 @@ armadilhas
 armadilhas
 0
 2
-2.0
+1.0
 1
 1
 %
@@ -421,7 +510,7 @@ abrigos
 abrigos
 1
 10
-10.0
+5.0
 1
 1
 NIL
@@ -438,9 +527,9 @@ Sliders Ambiente:
 1
 
 TEXTBOX
-171
+172
 61
-321
+322
 83
 Sliders Agentes:
 18
@@ -448,39 +537,39 @@ Sliders Agentes:
 1
 
 SLIDER
-169
+170
 89
-341
+342
 122
 nbasics
 nbasics
 0
-100
-9.0
+30
+30.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-169
+170
 122
-341
+342
 155
 nexperts
 nexperts
 0
-100
-24.0
+20
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 TEXTBOX
-170
+171
 164
-320
+321
 198
 Basics - Branco\nExperts - Magenta
 14
@@ -505,26 +594,67 @@ CHOOSER
 versão-modelo
 versão-modelo
 "base" "melhorado"
-0
+1
 
 MONITOR
-167
+168
 206
-248
+249
 251
-NIL
+Basics
 count basics
 17
 1
 11
 
 MONITOR
-251
+252
 206
-341
+342
 251
-NIL
+Experts
 count experts
+17
+1
+11
+
+PLOT
+6
+319
+342
+512
+Basics vs Experts
+ticks
+turtles
+0.0
+25.0
+0.0
+25.0
+true
+true
+"" ""
+PENS
+"basics" 1.0 0 -16777216 true "" "plot count basics"
+"experts" 1.0 0 -5825686 true "" "plot count experts"
+
+MONITOR
+168
+261
+250
+306
+Armadilhas
+count patches with [pcolor = red]
+17
+1
+11
+
+MONITOR
+253
+261
+342
+306
+Abrigos
+count patches with [pcolor = blue]
 17
 1
 11
@@ -871,7 +1001,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.2.2
+NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
