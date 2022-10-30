@@ -22,9 +22,7 @@ to Go
     Reproduz
     Basic-Armadilha
     Expert-Armadilha
-
-    ;Ocupa-Abrigo
-    ;;Death
+    ;Death
 
   tick
   if count turtles = 0 or ticks = 500 [stop]
@@ -234,6 +232,7 @@ to MoveBasics
       if any? regens-on patch-right-and-ahead 90 1 and energy < 20
       [set energy 100]
 
+    Death
   ]
 end
 
@@ -363,6 +362,8 @@ to MoveExperts
 
       if any? regens-on patch-right-and-ahead 90 1 and energy < 20
       [set energy energy + 25]
+
+      Death
   ]
 end
 
@@ -537,7 +538,7 @@ BUTTON
 56
 NIL
 Go
-T
+NIL
 1
 T
 OBSERVER
@@ -556,7 +557,7 @@ alimento_verde
 alimento_verde
 0
 15
-8.0
+0.0
 1
 1
 %
@@ -571,7 +572,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-5.0
+0.0
 1
 1
 %

@@ -159,6 +159,8 @@ to MoveBasics
         )
       ]
     )
+
+    Death
   ]
 end
 
@@ -258,6 +260,7 @@ to MoveExperts
 
       set energy energy + basicEnergy ;o expert fica com a energia do basic q matou
 
+    Death
   ]
 end
 
