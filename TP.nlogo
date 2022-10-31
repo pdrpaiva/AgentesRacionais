@@ -3,7 +3,7 @@ breed [experts expert] ;cria agentes do tipo expert
 
 turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
-globals[alimentos_verde alimentos_amarelo]
+globals[alimentos_verde alimentos_amarelo ingeridosVerde ingeridosAmarelo]
 to Setup
   Setup-Patches
   Setup-Turtles
@@ -60,6 +60,9 @@ to Setup-Patches
   [
     set pcolor blue
   ]
+
+  set ingeridosVerde 0
+  set ingeridosAmarelo 0
 
 end
 
@@ -300,6 +303,7 @@ to Basic-Food
   if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent basic ganha 10 de energia
     set pcolor black
     set energy energy + 10
+    set ingeridosAmarelo ingeridosAmarelo + 1
   ]
   ]
 end
@@ -311,14 +315,15 @@ to Expert-Food
     set energy energy + 10
     set alimento alimento + 1 ;o alimento incrementa
     if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 2] ;se o resto da divisao do alimento por 10 for 0 ganha 2 de xp
-
+    set ingeridosVerde ingeridosVerde + 1
   ][
     if [pcolor] of patch-here = yellow [ ; se o patch for amarelo, transforma-o em preto e o agent expert ganha 5 de energia
     set pcolor black
     set energy energy + 5
     set alimento alimento + 1 ;o alimento incrementa
     if alimento - (int (alimento / 10)) * 10 = 0 [set xp xp + 1] ;se o resto da divisao do alimento por 10 for 0 ganha 1 de xp
-  ]]
+    set ingeridosAmarelo ingeridosAmarelo + 1
+    ]]
   ]
 end
 
@@ -396,9 +401,9 @@ ticks
 
 BUTTON
 173
-413
+465
 254
-458
+510
 NIL
 Setup
 NIL
@@ -413,12 +418,12 @@ NIL
 
 BUTTON
 259
-413
+465
 346
-458
+510
 NIL
 Go
-T
+NIL
 1
 T
 OBSERVER
@@ -437,7 +442,7 @@ alimento_verde
 alimento_verde
 0
 15
-15.0
+2.0
 1
 1
 %
@@ -482,7 +487,7 @@ abrigos
 abrigos
 1
 10
-5.0
+2.0
 1
 1
 NIL
@@ -517,7 +522,7 @@ nbasics
 nbasics
 0
 100
-50.0
+95.0
 1
 1
 NIL
@@ -532,7 +537,7 @@ nexperts
 nexperts
 0
 100
-50.0
+5.0
 1
 1
 NIL
@@ -592,9 +597,9 @@ count experts
 
 PLOT
 174
-248
+300
 348
-396
+448
 Basics vs Experts
 ticks
 turtles
@@ -662,6 +667,28 @@ Estatísticas:
 18
 0.0
 1
+
+MONITOR
+173
+241
+254
+286
+A.Ingerido.A
+ingeridosAmarelo
+17
+1
+11
+
+MONITOR
+257
+241
+347
+286
+A.Ingerido.V
+ingeridosVerde
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1005,7 +1032,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.3.0
+NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -1064,6 +1091,39 @@ NetLogo 6.3.0
     </enumeratedValueSet>
     <enumeratedValueSet variable="alimento_verde">
       <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;base&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiencia3" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count patches with [pcolor = blue]</metric>
+    <metric>count patches with [pcolor = red]</metric>
+    <metric>count patches with [pcolor = yellow]</metric>
+    <metric>count patches with [pcolor = green]</metric>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="95"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="versão-modelo">
       <value value="&quot;base&quot;"/>
