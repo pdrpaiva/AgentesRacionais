@@ -4,6 +4,7 @@ breed [regens regen]
 
 turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
+globals[alimentos_verde alimentos_amarelo]
 
 to Setup
   Setup-Patches
@@ -19,6 +20,7 @@ to Go
     MoveRegens
     Basic-Food
     Expert-Food
+    RegenAlimento
     Reproduz
     Basic-Armadilha
     Expert-Armadilha
@@ -41,11 +43,13 @@ to Setup-Patches
     if random 101 < alimento_verde ;gera o alimento verde com base no slider da interface
     [
       set pcolor green
+      set alimentos_verde count patches with [pcolor = green]
     ]
 
     if random 101 < alimento_amarelo ;gera o alimento amarelo com base no slider da interface
     [
       set pcolor yellow
+      set alimentos_amarelo count patches with [pcolor = yellow]
     ]
 
     if random 101 < armadilhas ;gera as armadilhas com base no slider da interface
@@ -57,6 +61,31 @@ to Setup-Patches
   ask n-of abrigos patches
   [
     set pcolor blue
+  ]
+
+end
+
+to RegenAlimento
+
+  ;let p count patches with [pcolor = black]
+  ;set alimento_amarelo p * ( alimento_amarelo / 100)
+
+  if count patches with [pcolor = green] < alimentos_verde
+  [
+    while[count patches with [pcolor = green] < alimentos_verde]
+    [
+      ask one-of patches with [not any? turtles-here and pcolor = black]
+      [set pcolor green]
+    ]
+  ]
+
+  if count patches with [pcolor = yellow] < alimentos_amarelo
+  [
+    while[count patches with [pcolor = yellow] < alimentos_amarelo]
+    [
+      ask one-of patches with [not any? turtles-here and pcolor = black]
+      [set pcolor yellow]
+    ]
   ]
 end
 
@@ -488,9 +517,9 @@ to Reproduz
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-454
+477
 10
-1017
+1040
 574
 -1
 -1
@@ -557,7 +586,7 @@ alimento_verde
 alimento_verde
 0
 15
-0.0
+8.0
 1
 1
 %
@@ -572,7 +601,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-0.0
+2.0
 1
 1
 %
@@ -637,7 +666,7 @@ nbasics
 nbasics
 0
 30
-2.0
+8.0
 1
 1
 NIL
@@ -652,7 +681,7 @@ nexperts
 nexperts
 0
 25
-0.0
+4.0
 1
 1
 NIL
@@ -689,9 +718,9 @@ versão-modelo
 1
 
 MONITOR
-183
+140
 331
-264
+203
 376
 Basics
 count basics
@@ -700,9 +729,9 @@ count basics
 11
 
 MONITOR
-267
+207
 331
-357
+270
 376
 Experts
 count experts
@@ -711,9 +740,9 @@ count experts
 11
 
 PLOT
-4
+5
 380
-443
+468
 573
 Basics vs Experts
 ticks
@@ -732,7 +761,7 @@ PENS
 MONITOR
 5
 331
-87
+69
 376
 Armadilhas
 count patches with [pcolor = red]
@@ -741,9 +770,9 @@ count patches with [pcolor = red]
 11
 
 MONITOR
-90
+72
 331
-179
+136
 376
 Abrigos
 count patches with [pcolor = blue]
@@ -752,9 +781,9 @@ count patches with [pcolor = blue]
 11
 
 MONITOR
-360
+274
 331
-443
+337
 376
 Regens
 count regens
@@ -786,6 +815,28 @@ Estatísticas:
 18
 0.0
 1
+
+MONITOR
+407
+331
+469
+376
+A. Amarelo
+count patches with [pcolor = yellow]
+17
+1
+11
+
+MONITOR
+341
+331
+403
+376
+A.Verde
+count patches with [pcolor = green]
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
