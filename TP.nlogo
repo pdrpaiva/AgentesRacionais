@@ -437,7 +437,7 @@ alimento_verde
 alimento_verde
 0
 15
-12.0
+15.0
 1
 1
 %
@@ -452,7 +452,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-3.0
+5.0
 1
 1
 %
@@ -517,7 +517,7 @@ nbasics
 nbasics
 0
 100
-14.0
+50.0
 1
 1
 NIL
@@ -532,7 +532,7 @@ nexperts
 nexperts
 0
 100
-5.0
+50.0
 1
 1
 NIL
@@ -1009,6 +1009,67 @@ NetLogo 6.3.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment1" repetitions="15" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <exitCondition>count turtles = 0</exitCondition>
+    <metric>count turtles</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;base&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment2" repetitions="15" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <exitCondition>count turtles = 0</exitCondition>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;base&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
