@@ -3,7 +3,7 @@ breed [experts expert] ;cria agentes do tipo expert
 
 turtles-own [ energy ]
 experts-own [ xp alimento tempo-descanso]
-
+globals[alimentos_verde alimentos_amarelo]
 to Setup
   Setup-Patches
   Setup-Turtles
@@ -17,6 +17,7 @@ to Go
     MoveExperts
     Basic-Food
     Expert-Food
+    RegenAlimento
     Basic-Armadilha
     Expert-Armadilha
 
@@ -40,11 +41,13 @@ to Setup-Patches
     if random 101 < alimento_verde ;gera o alimento verde com base no slider da interface
     [
       set pcolor green
+      set alimentos_verde count patches with [pcolor = green]
     ]
 
     if random 101 < alimento_amarelo ;gera o alimento amarelo com base no slider da interface
     [
       set pcolor yellow
+      set alimentos_amarelo count patches with [pcolor = yellow]
     ]
 
     if random 101 < armadilhas ;gera as armadilhas com base no slider da interface
@@ -58,6 +61,30 @@ to Setup-Patches
     set pcolor blue
   ]
 
+end
+
+to RegenAlimento
+
+  ;let p count patches with [pcolor = black]
+  ;set alimento_amarelo p * ( alimento_amarelo / 100)
+
+  if count patches with [pcolor = green] < alimentos_verde
+  [
+    while[count patches with [pcolor = green] < alimentos_verde]
+    [
+      ask one-of patches with [not any? turtles-here and pcolor = black]
+      [set pcolor green]
+    ]
+  ]
+
+  if count patches with [pcolor = yellow] < alimentos_amarelo
+  [
+    while[count patches with [pcolor = yellow] < alimentos_amarelo]
+    [
+      ask one-of patches with [not any? turtles-here and pcolor = black]
+      [set pcolor yellow]
+    ]
+  ]
 end
 
 to Setup-Turtles
@@ -391,7 +418,7 @@ BUTTON
 458
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -425,7 +452,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-5.0
+3.0
 1
 1
 %
@@ -440,7 +467,7 @@ armadilhas
 armadilhas
 0
 2
-2.0
+1.0
 1
 1
 %
@@ -455,7 +482,7 @@ abrigos
 abrigos
 1
 10
-10.0
+5.0
 1
 1
 NIL
@@ -579,7 +606,7 @@ true
 false
 "" ""
 PENS
-"basics" 1.0 0 -16777216 true "" "plot count bascics"
+"basics" 1.0 0 -16777216 true "" "plot count basics"
 "experts" 1.0 0 -5825686 true "" "plot count experts"
 
 MONITOR
