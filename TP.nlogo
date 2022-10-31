@@ -423,7 +423,7 @@ BUTTON
 510
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -442,7 +442,7 @@ alimento_verde
 alimento_verde
 0
 15
-2.0
+15.0
 1
 1
 %
@@ -472,7 +472,7 @@ armadilhas
 armadilhas
 0
 2
-1.0
+0.0
 1
 1
 %
@@ -487,7 +487,7 @@ abrigos
 abrigos
 1
 10
-2.0
+10.0
 1
 1
 NIL
@@ -522,7 +522,7 @@ nbasics
 nbasics
 0
 100
-95.0
+30.0
 1
 1
 NIL
@@ -1037,40 +1037,68 @@ NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="experiment1" repetitions="15" runMetricsEveryStep="false">
+  <experiment name="experiment3_1" repetitions="15" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="501"/>
-    <exitCondition>count turtles = 0</exitCondition>
-    <metric>count turtles</metric>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
     <metric>ticks</metric>
     <enumeratedValueSet variable="alimento_amarelo">
-      <value value="5"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="armadilhas">
-      <value value="1"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="nbasics">
-      <value value="50"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="abrigos">
-      <value value="5"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="nexperts">
       <value value="0"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="1"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="alimento_verde">
-      <value value="15"/>
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="versão-modelo">
       <value value="&quot;base&quot;"/>
     </enumeratedValueSet>
   </experiment>
-  <experiment name="experiment2" repetitions="15" runMetricsEveryStep="false">
+  <experiment name="experiment3_2" repetitions="15" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="501"/>
-    <exitCondition>count turtles = 0</exitCondition>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;base&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment3_3" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
     <metric>count basics</metric>
     <metric>count experts</metric>
     <metric>ticks</metric>
@@ -1078,52 +1106,19 @@ NetLogo 6.2.2
       <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="armadilhas">
-      <value value="1"/>
+      <value value="0"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="nbasics">
-      <value value="50"/>
+      <value value="30"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="abrigos">
-      <value value="5"/>
+      <value value="10"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="nexperts">
-      <value value="50"/>
+      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="alimento_verde">
       <value value="15"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="versão-modelo">
-      <value value="&quot;base&quot;"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="experiencia3" repetitions="15" runMetricsEveryStep="true">
-    <setup>setup</setup>
-    <go>go</go>
-    <timeLimit steps="501"/>
-    <metric>count patches with [pcolor = blue]</metric>
-    <metric>count patches with [pcolor = red]</metric>
-    <metric>count patches with [pcolor = yellow]</metric>
-    <metric>count patches with [pcolor = green]</metric>
-    <metric>count basics</metric>
-    <metric>count experts</metric>
-    <metric>ticks</metric>
-    <enumeratedValueSet variable="alimento_amarelo">
-      <value value="5"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="nbasics">
-      <value value="95"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="armadilhas">
-      <value value="1"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="abrigos">
-      <value value="2"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="alimento_verde">
-      <value value="2"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="nexperts">
-      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="versão-modelo">
       <value value="&quot;base&quot;"/>

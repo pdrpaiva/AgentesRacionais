@@ -125,13 +125,16 @@ to Perde-Energia ;NÃO FAZ PARTE
   set energy energy - 1
 end
 
-to MoveBasics
-
+to AlimentoLaranja
   ;faz com que apareça um patch laranja random a cada 7 ticks (isto só até ao tick 200)
   if ticks - (int (ticks / 7)) * 7 = 0 and ticks < 200 ;se o resto da divisao dos ticks por 5 for 0 spawna um patch laranja num sitio random
   [
     ask one-of patches with[pcolor = black] [set pcolor orange]
   ]
+end
+
+to MoveBasics
+  AlimentoLaranja
 
   ask basics[
     let x energy
@@ -467,7 +470,7 @@ end
 to Basic-Armadilha
  ask basics[
  if [pcolor] of patch-ahead 1 = red or  [pcolor] of patch-right-and-ahead 90 1 = red or  [pcolor] of patch-left-and-ahead 90 1 = red[ ;se percecionar uma armadilha
-    if energy < 100 [ die ] ;morre se a sua energia for inferior a 100
+    if energy < 10 [ die ] ;morre se a sua energia for inferior a 100
     if energy >= 100 [ set energy energy - (energy * 0.1)]  ;perde 10% da sua energia se a sua energia for superior a 100
  ]
  ]
@@ -567,7 +570,7 @@ BUTTON
 56
 NIL
 Go
-NIL
+T
 1
 T
 OBSERVER
@@ -586,7 +589,7 @@ alimento_verde
 alimento_verde
 0
 15
-8.0
+15.0
 1
 1
 %
@@ -601,7 +604,7 @@ alimento_amarelo
 alimento_amarelo
 0
 5
-2.0
+5.0
 1
 1
 %
@@ -616,7 +619,7 @@ armadilhas
 armadilhas
 0
 2
-1.0
+2.0
 1
 1
 %
@@ -631,7 +634,7 @@ abrigos
 abrigos
 1
 10
-7.0
+10.0
 1
 1
 NIL
@@ -665,8 +668,8 @@ SLIDER
 nbasics
 nbasics
 0
-30
-8.0
+100
+4.0
 1
 1
 NIL
@@ -681,7 +684,7 @@ nexperts
 nexperts
 0
 25
-4.0
+5.0
 1
 1
 NIL
@@ -800,7 +803,7 @@ nregens
 nregens
 0
 5
-3.0
+5.0
 1
 1
 NIL
@@ -1180,12 +1183,76 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.3.0
+NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="teste" repetitions="15" runMetricsEveryStep="true">
+  <experiment name="experiment2_1" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="95"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment2_2" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="95"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment2_3" repetitions="15" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="501"/>
@@ -1195,23 +1262,311 @@ NetLogo 6.3.0
     <enumeratedValueSet variable="alimento_amarelo">
       <value value="5"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="armadilhas">
-      <value value="1"/>
-    </enumeratedValueSet>
     <enumeratedValueSet variable="nbasics">
+      <value value="95"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
       <value value="2"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="abrigos">
-      <value value="7"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="alimento_verde">
-      <value value="8"/>
+      <value value="10"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="nregens">
-      <value value="3"/>
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment1_1" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="0"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="nexperts">
       <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment1_2" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment1_3" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment3_1" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment3_2" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment3_3" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment4_1" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment4_2" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="versão-modelo">
+      <value value="&quot;melhorado&quot;"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment4_3" repetitions="15" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="501"/>
+    <metric>count basics</metric>
+    <metric>count experts</metric>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="alimento_amarelo">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nbasics">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="armadilhas">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="abrigos">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nregens">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="nexperts">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alimento_verde">
+      <value value="15"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="versão-modelo">
       <value value="&quot;melhorado&quot;"/>
