@@ -25,7 +25,7 @@ to Go
     ;;Death
 
   tick
-  if count turtles = 0 or ticks = 501 [stop]
+  if count turtles = 0 or ticks = 1001 [stop]
 end
 
 
@@ -472,7 +472,7 @@ armadilhas
 armadilhas
 0
 2
-0.0
+1.0
 1
 1
 %
@@ -537,7 +537,7 @@ nexperts
 nexperts
 0
 100
-5.0
+30.0
 1
 1
 NIL
